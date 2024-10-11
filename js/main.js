@@ -211,3 +211,46 @@
 
 
 })(jQuery);
+
+
+document.getElementById('reservationForm').addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevent default form submission
+
+  // Gather form data
+  const fullName = document.getElementById('fullName').value;
+  const phone = document.getElementById('phone').value;
+  const email = document.getElementById('email').value;
+  const checkinDate = document.getElementById('check').value;
+  const checkoutDate = document.getElementById('checkout').value;
+  const ticketCount = document.getElementById('adults').value;
+  const message = document.getElementById('message').value;
+
+  // Create the data object to send
+  const reservationData = {
+    fullName: fullName,
+    email: email,
+    phone: phone,
+    startDate: checkinDate,
+    endDate: checkoutDate,
+    ticketCount: parseInt(ticketCount),
+    message: message
+  };
+
+  // Send the POST request with fetch
+  fetch('https://email-service-vqj9.onrender.com/api/v1/email/check-availability', { // Replace with your actual endpoint
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(reservationData) // Convert object to JSON
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Success:', data);
+    alert("Reservation successful!");
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+    alert("There was an error with your reservation.");
+  });
+});
